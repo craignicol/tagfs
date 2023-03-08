@@ -1,0 +1,100 @@
+TagFS
+
+Inspired by labels/meta-data/del.icio.us and the semantic web
+
+--------
+
+Each file has two sets of labels: tags and owners
+owners are rougly equivalent to Unix users and groups
+tags are roughly equivalalent to Unix directories
+
+Each file has 1 or more owners and 0 or more tags
+
+If a file test.txt is tagged as etc and doc, it is available at
+/etc/doc/test.txt
+/etc/test.txt
+/test.txt
+/doc/test.txt
+/doc/etc/test.txt
+
+Each user is granted privaledges based on the tag, 
+e.g. user guest might have rwx privaledges for tag temp, r-x for tag safe,
+r-- for tag system and --- for all other tags.
+
+i.e. guest can rwx anything with temp tag,
+no matter what other tags are assigned, but for files tagged eg safe usr bin
+guest can only read or run.
+
+Possible shell commands:
+tag-add	     (mv tag)
+tag-remove   (mv ..)
+tag-filter   (ls tag)
+
+
+Special tags:
+User defined - no special syntax, defined as a search
+e.g. system is lib AND bin AND boot
+help is doc AND docs AND man AND info
+
+Be aware, lastNseconds etc. depends on execution speed...
+
+System defined:
+:today		All files modified since midnight
+:yesterday
+:thisweek	Since Monday
+:lastN[seconds|minutes|hours|days|weeks|months|years]
+:since{Date}
+:before{Date}
+              [Seconds measured in epoch time below]
+:atleastN[bytes|kilobytes|megabytes|gigabytes|tags|seconds]
+:atmostN[bytes|kilobytes|megabytes|gigabytes|tags|seconds]
+:exactlyN[bytes|kilobytes|megabytes|gigabytes|tags|seconds]
+:largestN
+:smallestN
+:oldestN
+:youngestN
+
+ranges are defined by combining tags - :atmost5tags :atleast2tags
+
+DB format: (need pickler for this)
+
+<tagfs>
+<file>
+<name>test.txt</name>
+<owner>user</owner>
+<group>guests</group>
+<tags>
+<tag>Test</tag>
+<tag>Text File</tag>
+</tags>
+<permissions>rwxr--r--</permissions>
+</file>
+<file><name>...</name><owners>...</owners>...</file>
+<search>
+<name>Name</name>
+<tag>list/of tags :special ::othersearch</tag>
+</search>
+<search>...</search>
+<tagdata>
+<tag>name</tag><permissions>rwx--x--x</permissions>
+<tag>...</tag><permissions>...</permissions>
+</tagdata>
+</tagfs>
+
+-------------------------------------------------
+Problems retrofitting:
+
+Every program has a README - how do we distinguish them? Use INODE as index
+instead of filename. See how other FS systems do this.
+
+----------------
+Permissions handling? :
+
+Each file has a set of permissions encoded in standard UNIX octal format
+Each label has a set of permissions
+By default, each file has permissions equal to the ANDed result of its labels.
+Files can be ln linked to a file with different permissions and labels.
+
+-----------------
+For shell tab-completion:
+call tagfs.testwildcards("linesofar" + "*") for list of possibles

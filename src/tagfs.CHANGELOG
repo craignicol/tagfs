@@ -1,0 +1,33 @@
+v0.6
+Added ability to open files - returning a list of file handles
+Added cat to tagcmdsh to demonstrate opening files
+
+v0.51
+Updated error handling for rm
+Added new docstrings for public methods
+
+v0.5
+Fixed bug in bracketing code
+Fixed bug when reloading file info from local store
+Added refresh command
+Added forking on &, but killing doesn't work
+Fixed ls -l tag formatting bug
+
+v0.4
+Fixed cp not working bug
+Added tab completion for tags, files and shell commands. Still need it for general executables.
+Reworked file loading for DOS compatability and enhanced file data info (adate and cdate)
+Added wildcard handling for files.
+Improved ls: prints domain at top of file list
+
+v0.3
+Added shell prompt format changing
+Created tagcmdsh.py from tagsh.py as a subclass of cmd.py to create history
+
+v0.2
+Added time formatting to ls
+Added wildcard tag handling
+Fixed multiple inode per filename bug
+
+v0.1
+First BETA

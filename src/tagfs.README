@@ -1,0 +1,43 @@
+To run the demo type:
+       python tagfs.py
+       
+To try out the shell on your own files type:
+       ./tagcmdsh.py
+       (OR python tagcmdsh.py)
+       
+Inside the shell type:
+       help                for a list of commands
+       cp tagfs.py tagfs   to apply tag 'tagfs' to file tagfs.py
+       rm tagfs.py tagfs   to remove tag 'tagfs' from file tagfs.py
+       ls tagfs            to list all files with tag 'tagfs'
+       ls -t tagfs.py      to the the tags applied to tagfs.py
+       ls -l               to list all file info about all files
+       cd                  to change domain (tag search context)
+       alias               for a list of saved searches
+       quit
+       
+Notes:
+       The shell has a history feature accessable by the arrow
+       keys, tab completion and the usual bash commands.
+       Saved searches and file tags are saved in thisdir.tagfs in the
+       working directory. If you delete this file, that information will
+       be lost and a fresh thisdir.tags will be created.
+       All fileinfo is linked to the inode, not the filename, of the
+       current file, so you can have two files with the same name in
+       the current domain. Use ls -l to see the inode (first column)
+       
+Known issues:
+       Long start-up time. Has to refresh the internal file list at each
+       start-up. There is currently no cache so this can be slow. Please
+       be patient. The prompt will appear after a short time.
+       No synchonisation. If you change a file on disk it currently won't
+       be updated until tagfs is restarted or refreshed. This is
+       related to the above issue. Will need system hooks to allow
+       updating of a single file.
+       ( Any others ? )
+
+Planned features:
+       Forking of child processes via & invokation - still buggy
+       Tab-completion of system executables (as exposed by system path)
+       Translation of local file references to child processes.
+       Saving command history to thisdir.tagfs
