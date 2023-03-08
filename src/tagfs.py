@@ -557,10 +557,10 @@ class tagfs:
         return self.__ls(self.getsearch(tag[2:]))
       else: # We need to do some fs handling
         return self.__getsystemtag(tag)
-      elif self.__tags.has_key(tag):
-        return self.__tags[tag]
-      else:
-        return []
+    elif self.__tags.has_key(tag):
+      return self.__tags[tag]
+    else:
+      return []
 
   def getsearch(self, tag):
     """ self.getsearch(tag) -> list of searches
