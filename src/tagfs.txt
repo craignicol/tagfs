@@ -26,7 +26,7 @@ no matter what other tags are assigned, but for files tagged eg safe usr bin
 guest can only read or run.
 
 Possible shell commands:
-tag-add	     (mv tag)
+tag-add         (mv tag)
 tag-remove   (mv ..)
 tag-filter   (ls tag)
 
@@ -39,9 +39,9 @@ help is doc AND docs AND man AND info
 Be aware, lastNseconds etc. depends on execution speed...
 
 System defined:
-:today		All files modified since midnight
+:today        All files modified since midnight
 :yesterday
-:thisweek	Since Monday
+:thisweek    Since Monday
 :lastN[seconds|minutes|hours|days|weeks|months|years]
 :since{Date}
 :before{Date}

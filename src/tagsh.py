@@ -53,52 +53,52 @@ def run(cmdstring, tfs):
   """
   cmd = string.split(cmdstring, ' ', 1)
   if len(cmd) == 1: # no args
-	cmd.append("")
-	
+    cmd.append("")
+    
   if cmd[0] == "ls":
-	# Improve formatting
-	files = tfs.ls(cmd[1])
-	for f in files:
-	  print f + '\t',
-	print "\nTotal files", len(files)
+    # Improve formatting
+    files = tfs.ls(cmd[1])
+    for f in files:
+      print f + '\t',
+    print "\nTotal files", len(files)
   elif cmd[0] == "cd":
-	tfs.cd(cmd[1])
+    tfs.cd(cmd[1])
   elif cmd[0] == "pwd":
-	print tfs.pwd()
+    print tfs.pwd()
   elif cmd[0] == "cp": # TODO: This might need smart split
-	a = string.split(cmd[1])
-	try:
-	  tfs.cp(a[0], a[1])
-	except "File Not Found":
-	  print str(a[0]) + ": File does not exist"
+    a = string.split(cmd[1])
+    try:
+      tfs.cp(a[0], a[1])
+    except "File Not Found":
+      print str(a[0]) + ": File does not exist"
   elif cmd[0] == "rm": # TODO: This might need smart split
-	a = string.split(cmd[1])
-	try:
-	  tfs.rm(a[0], a[1])
-	except "File Not Found":
-	  print str(a[0]) + ": File does not exist"
+    a = string.split(cmd[1])
+    try:
+      tfs.rm(a[0], a[1])
+    except "File Not Found":
+      print str(a[0]) + ": File does not exist"
   elif cmd[0] == "alias":
-	if string.strip(cmd[1]) == "":
-	  print tfs.showsearches()
-	  return
-	a = string.split(cmd[1], ' ', 1)
-	if a[0][:2] != "::":
-	  print "Search alias MUST start with ::"
-	  return
-	if len(a) > 1:
-	  tfs.savesearch(a[0][2:], a[1])
-	else:
-	  tfs.delsearch(a[0][2:])
+    if string.strip(cmd[1]) == "":
+      print tfs.showsearches()
+      return
+    a = string.split(cmd[1], ' ', 1)
+    if a[0][:2] != "::":
+      print "Search alias MUST start with ::"
+      return
+    if len(a) > 1:
+      tfs.savesearch(a[0][2:], a[1])
+    else:
+      tfs.delsearch(a[0][2:])
   elif cmd[0] == "help":
-	if len(cmd[1]) > 0 and cmd[1][0] == "s":
-	  helpspecialtags()
-	else:
-	  help()
+    if len(cmd[1]) > 0 and cmd[1][0] == "s":
+      helpspecialtags()
+    else:
+      help()
   else: # hand over to caller - need to restice files properly & fork
-	files = os.popen(cmdstring)
-	print files.read()
-	files.close()
-	
+    files = os.popen(cmdstring)
+    print files.read()
+    files.close()
+    
 def runsh(args = None):
   config = "thisdir.tagshrc"
   promptfmt = "[user %PWD%]$ "
@@ -111,24 +111,24 @@ def runsh(args = None):
   
   t = tagfs.tagfs()
   try:
-	t.loadDB(config) # Try to load searches file
+    t.loadDB(config) # Try to load searches file
   except IOError:
-	"Cannot load searches from config file."
+    "Cannot load searches from config file."
   
   print "Loading file info..."
   t.refresh() # Load file info
 
   cmd = "\n"
   while cmd != "" and cmd[:4] != "quit" and cmd[:6] != "logout" and cmd[:4] != "exit":
-	run(string.strip(cmd), t)
-	print string.replace(promptfmt, "%PWD%", t.pwd()),
-	# cmd = sys.stdin.readline()
-	cmd = readline.get_line_buffer()
+    run(string.strip(cmd), t)
+    print string.replace(promptfmt, "%PWD%", t.pwd()),
+    # cmd = sys.stdin.readline()
+    cmd = readline.get_line_buffer()
   
   try:
-	t.saveDB(config)
+    t.saveDB(config)
   except IOError:
-	print "Cannot save searches to config file"
-	
+    print "Cannot save searches to config file"
+    
 if __name__ == "__main__":
   runsh(sys.argv)
