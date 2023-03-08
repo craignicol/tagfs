@@ -5,6 +5,8 @@ This is probably quite inefficient for now.
 
 Since this uses ls to retrieve file info, it is Unix only
 """
+from __future__ import print_function
+
 import utils
 import string
 import pickle
@@ -248,8 +250,8 @@ class tagfs:
         return self.ls(self.__getsearch(tag[2:]))
       else: # We need to do some fs handling
         return self.__getsystemtag(tag)
-      elif self.__tags.has_key(tag):
-        return self.__tags[tag]
+    elif self.__tags.has_key(tag):
+      return self.__tags[tag]
     else:
       return []
 
@@ -334,24 +336,24 @@ class tagfs:
 
 def testsuite():
   t = tagfs(testdata)
-  print "ls bandname :", t.ls("bandname")
-  print "ls file.txt :", t.ls("file.txt")
-  print "ls notag :", t.ls("notag")
-  print "ls test/music :", t.ls("test/music")
-  print "ls music text :", t.ls("music text")
-  print "ls test/text bandname :", t.ls("test/text bandname")
+  print ("ls bandname :", t.ls("bandname"))
+  print ("ls file.txt :", t.ls("file.txt"))
+  print ("ls notag :", t.ls("notag"))
+  print ("ls test/music :", t.ls("test/music"))
+  print ("ls music text :", t.ls("music text"))
+  print ("ls test/text bandname :", t.ls("test/text bandname"))
   t.cp("file.txt", "bandname")
-  print "cp file.txt bandname :", t.ls("file.txt"), t.ls("bandname")
+  print ("cp file.txt bandname :", t.ls("file.txt"), t.ls("bandname"))
   t.cp("file.txt", "newtag")
-  print "cp file.txt newtag :", t.ls("file.txt"), t.ls("newtag")
+  print ("cp file.txt newtag :", t.ls("file.txt"), t.ls("newtag"))
   t.rm("file.txt", "bandname")
-  print "rm file.txt bandname", t.ls("file.txt"), t.ls("bandname")
+  print ("rm file.txt bandname", t.ls("file.txt"), t.ls("bandname"))
   t.saveDB("pickle.tagfs")
   t.loadDB("pickle.tagfs")
-  print "ls test/text bandname :", t.ls("test/text bandname")
+  print ("ls test/text bandname :", t.ls("test/text bandname"))
   t.exportXML("tagfs.xml")
-  print "ls :atleast2megabytes", t.ls(":atleast2megabytes")
-  print "ls :atmost20bytes", t.ls(":atmost20bytes")    
+  print ("ls :atleast2megabytes", t.ls(":atleast2megabytes"))
+  print ("ls :atmost20bytes", t.ls(":atmost20bytes"))
     
 if __name__ == "__main__":
   testsuite()

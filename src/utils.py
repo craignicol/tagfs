@@ -1,4 +1,6 @@
 # Defines a set of functions I've found useful
+from __future__ import print_function
+
 import string
 
 def listfind(ll, value):
@@ -43,7 +45,7 @@ def loadraw(filename):
   try:
     f = open(filename)
   except IOError:
-    print 'Cannot open file:', filename
+    print ('Cannot open file:', filename)
     return ''
   else:
     raw = f.read()
@@ -58,7 +60,7 @@ def saveraw(filename, data):
   try:
     f = open(filename, "w")
   except IOError:
-    print 'Cannot open file:', filename
+    print ('Cannot open file:', filename)
     return -1
   else:
     f.write(data)
@@ -91,7 +93,7 @@ def find_placeholder(data, start, startquote='%%', endquote='%%', excludelist=[]
     return placeholder
   else:
     if verbose > 1:
-      print 'Ignoring placeholder:', placeholder
+      print ('Ignoring placeholder:', placeholder)
     newstart = tag_start + len(startquote + placeholder + endquote)
     return find_placeholder(data, newstart, startquote, endquote, excludelist)
 
@@ -423,7 +425,7 @@ def convertstring(s, basictype):
     return string.atof(s)
   elif type(basictype) == type(0):
     return string.atoi(s)
-  elif type(basictype) == type(0L):
+  elif type(basictype) == "long":
     return string.atol(s)
   elif type(basictype) == type([]):
     return smartsplit(s)

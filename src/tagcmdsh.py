@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 
 """ Tagcmdsh.py -- TagSH based on cmd.py
 """
@@ -60,7 +61,7 @@ class tagcmdsh(Cmd):
         try:
           binlist.extend(os.listdir(p))
         except OSError:
-          print "Ignoring missing path:",p
+          print ("Ignoring missing path:",p)
     self.tagfs.tabcompletionextend([], binlist)
     
     readline.set_completer(self.completer) #(self.tagfs.tabcompletion)
@@ -68,14 +69,14 @@ class tagcmdsh(Cmd):
     # Find the right combo for F5 key
     # readline.parse_and_bind('F5: "refresh\n"')
 
-    print "Loading searchDB..."
+    print ("Loading searchDB...")
     
     try:
       self.tagfs.loadDB(self.config) # Try to load searches file
     except IOError:
       "Cannot load searches from config file."
 
-    print "Loading file info..."
+    print ("Loading file info...")
     self.tagfs.refresh() # Load file info
 
   def emptyline(self): # turn off automatic last line completion
@@ -105,7 +106,7 @@ class tagcmdsh(Cmd):
      
   def do_h(self, args):
     """ h : short list of known shell commands """
-    print self.completenames(args)
+    print (self.completenames(args))
     
   def completer(self, text, state):
     if state == 0:
@@ -116,14 +117,14 @@ class tagcmdsh(Cmd):
       return None
 
   def help_help(self):
-    print "Display help on known commands."
+    print ("Display help on known commands.")
 
   def help_tags(self):
-    print tag_info
+    print (tag_info)
 
   def do_refresh(self, args):
     """ refresh : Refresh the current file info """
-    print "Loading file info..."
+    print ("Loading file info...")
     self.tagfs.refresh() # Load file info
     
   def do_ls(self, args):
@@ -139,11 +140,11 @@ class tagcmdsh(Cmd):
     # TODO: Improve formatting
     if utils.string_find_next_of(args, "*?") > -1:
       wc = self.tagfs.testwildcards(args)
-      print wc[:1] + ":name...", wc[1:], ":"
+      print (wc[:1] + ":name...", wc[1:], ":")
     files = self.tagfs.ls(args)
     for f in files:
-      print f + '\t',
-    print "\nTotal files", len(files)
+      print (f + '\t',)
+    print ("\nTotal files", len(files))
     
   def do_cd(self, args):
     """ cd [tags] : Change domain 
@@ -155,7 +156,7 @@ class tagcmdsh(Cmd):
 
   def do_pwd(self, args):
     """ pwd : show present working domain """
-    print self.tagfs.pwd()
+    print (self.tagfs.pwd())
     
   def do_cp(self, args):
     """ cp file tags : apply tags to file """
@@ -163,7 +164,7 @@ class tagcmdsh(Cmd):
     try:
       self.tagfs.cp(a[0], a[1])
     except tagfs.FileNotFound:
-      print str(a[0]) + ": File does not exist"
+      print (str(a[0]) + ": File does not exist")
 
   def do_rm(self, args):
     """ rm file tags : remove tags from file """
@@ -171,7 +172,7 @@ class tagcmdsh(Cmd):
     try:
       self.tagfs.rm(a[0], a[1])
     except tagfs.FileNotFound:
-      print str(a[0]) + ": File does not exist"
+      print (str(a[0]) + ": File does not exist")
     
   def do_alias(self, args):
     """ alias [::searchname [tags]] : saved search management 
@@ -181,11 +182,11 @@ class tagcmdsh(Cmd):
     With many arguments, assign the tags to the named search
     """
     if string.strip(args) == "":
-      print self.tagfs.showsearches()
+      print (self.tagfs.showsearches())
       return
     a = string.split(args, ' ', 1)
     if a[0][:2] != "::":
-      print "Search alias MUST start with ::"
+      print ("Search alias MUST start with ::")
       return
     if len(a) > 1:
       self.tagfs.savesearch(a[0][2:], a[1])
@@ -196,22 +197,22 @@ class tagcmdsh(Cmd):
     # DONE: allow forking
     # TODO: Check command before running...
     # TODO: Map tags in 'line' to actual file? - requires capturing FS interupts.
-      pid = -1
-      sline = string.strip(line)
-      if sline[-1] == "&":
-        sline = sline[:-1]
-        pid = os.fork()
-        if pid != 0:
-          print "New process <" + str(pid) + "> " + sline
-          # Note, python takes this pid, child programs
-          # take extra pids. Be aware.
-          return
+    pid = -1
+    sline = string.strip(line)
+    if sline[-1] == "&":
+      sline = sline[:-1]
+      pid = os.fork()
+      if pid != 0:
+        print ("New process <" + str(pid) + "> " + sline)
+        # Note, python takes this pid, child programs
+        # take extra pids. Be aware.
+        return
     files = os.popen(sline)
-    print files.read()
+    print (files.read())
     files.close()
-      if pid == 0:
-        print "Process ended <" + str(os.getpid()) + "> " + sline
-        os._exit(0) # exit cleanly
+    if pid == 0:
+      print ("Process ended <" + str(os.getpid()) + "> " + sline)
+      os._exit(0) # exit cleanly
 
 #  def do_kill(self, args):
 #    print args, int(args)
@@ -220,11 +221,11 @@ class tagcmdsh(Cmd):
         
   def do_EOF(self, args):
     """ Save the config file and exit. """
-    print "\nSaving searchDB..."
+    print ("\nSaving searchDB...")
     try:
       self.tagfs.saveDB(self.config)
     except IOError:
-      print "Cannot save searches to config file"
+      print ("Cannot save searches to config file")
     return -1
 
   def do_prompt(self, args):
@@ -239,10 +240,10 @@ class tagcmdsh(Cmd):
     filenames = self.tagfs.ls(args)
     fileids = self.tagfs.open(args)
     for name,fid in map(lambda a,b:(a,b), filenames, fileids):
-      print "--- START", name, "---"
+      print ("--- START", name, "---")
       for l in fid.readlines():
-        print l[:-1]
-      print "--- END", name, "---"
+        print (l[:-1])
+      print ("--- END", name, "---")
     
     
   do_quit = do_EOF

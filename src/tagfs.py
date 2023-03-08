@@ -5,6 +5,8 @@ This is probably quite inefficient for now.
 
 Since this uses ls to retrieve file info, it is Unix only
 """
+from __future__ import print_function
+
 import utils
 import string
 import pickle
@@ -12,6 +14,7 @@ import os
 import time
 import getopt
 import re # for wildcard matching
+from stat import *
 
 # Programs can redefine these 
 andsep = "/"
@@ -96,7 +99,7 @@ def smallestatleast(list, val):
   return v
     
 def ask(string):
-  print string
+  print (string)
   return 0
 
 class FileNotFound:
@@ -288,7 +291,6 @@ class tagfs:
                  moddate, otherdates..., filename, [tags...]),
           fid : (...) }
     """
-    from stat import *
     os.chdir(rootdir)
     pathtags = string.split(os.getcwd(), os.sep)[1:] # ignore leading sep
     typetags = []
@@ -758,7 +760,7 @@ class tagfs:
         try:
             filelist.append(open(name))
         except IOError:
-            print 'Error opening', name
+            print ('Error opening', name)
 
     return filelist
          
@@ -792,13 +794,13 @@ class tagfs:
 
   def cp(self, file, tag):
     if string.find(tag[0],":") > -1:
-      print "Cannot assign to system tag"
+      print ("Cannot assign to system tag")
       return 1
     if utils.string_find_next_of(tag, "/ ") > -1:
       tag = string.split(tag, " ", 1) # take only first arg
       taglist = string.split(tag[0], "/")
       for t in taglist:
-        print "self.cp(" + file + ", " + t + ")"
+        print ("self.cp(" + file + ", " + t + ")")
         self.cp(file, t)
       return None
     for fid in self.getfile(file):
@@ -858,52 +860,52 @@ class tagfs:
     
 def testsuite():
   t = tagfs(testdata)
-  print t
-  print "ls bandname :", t.ls("bandname")
-  print "ls !bandname :", t.ls("!bandname")
-  print "ls -l file.txt :", t.ls("file.txt", "-l")
-  print "ls notag :", t.ls("notag")
-  print "ls test/music :", t.ls("test/music")
-  print "ls music text :", t.ls("music text")
-  print "ls test/text bandname :", t.ls("test/text bandname")
+  print (t)
+  print ("ls bandname :", t.ls("bandname"))
+  print ("ls !bandname :", t.ls("!bandname"))
+  print ("ls -l file.txt :", t.ls("file.txt", "-l"))
+  print ("ls notag :", t.ls("notag"))
+  print ("ls test/music :", t.ls("test/music"))
+  print ("ls music text :", t.ls("music text"))
+  print ("ls test/text bandname :", t.ls("test/text bandname"))
   t.cp("file.txt", "bandname")
-  print "cp file.txt bandname :", t.ls("file.txt", "-l"), t.ls("bandname")
+  print ("cp file.txt bandname :", t.ls("file.txt", "-l"), t.ls("bandname"))
   t.cp("file.txt", "newtag")
-  print "cp file.txt newtag :", t.ls("file.txt", "-l"), t.ls("newtag")
+  print ("cp file.txt newtag :", t.ls("file.txt", "-l"), t.ls("newtag"))
   t.rm("file.txt", "bandname")
-  print "rm file.txt bandname", t.ls("file.txt", "-l"), t.ls("bandname")
+  print ("rm file.txt bandname", t.ls("file.txt", "-l"), t.ls("bandname"))
   t.savesearch("bandnews", "bandname/:last2months")
   t.saveDB("pickle.tagfs")
   t.loadDB("pickle.tagfs")
-  print "ls test/text bandname :", t.ls("test/text bandname")
+  print ("ls test/text bandname :", t.ls("test/text bandname"))
   # t.exportXML("tagfs.xml")
-  print "ls :atleast2megabytes", t.ls(":atleast2megabytes")
-  print "ls :atmost20bytes", t.ls(":atmost20bytes")  
-  print "ls :atleast3tags", t.ls(":atleast3tags")
-  print "ls :last2months", t.ls(":last2months")
-  print "ls :thisweek", t.ls(":thisweek")
-  print "ls :today", t.ls(":today")
-  print "ls :yesterday", t.ls(":yesterday")
-  print "ls ::bandnews", t.ls("::bandnews")
-  print "ls (bandname )", t.ls("(bandname )")
-  print "ls test (bandname) :", t.ls("test/(text bandname)")
+  print ("ls :atleast2megabytes", t.ls(":atleast2megabytes"))
+  print ("ls :atmost20bytes", t.ls(":atmost20bytes"))
+  print ("ls :atleast3tags", t.ls(":atleast3tags"))
+  print ("ls :last2months", t.ls(":last2months"))
+  print ("ls :thisweek", t.ls(":thisweek"))
+  print ("ls :today", t.ls(":today"))
+  print ("ls :yesterday", t.ls(":yesterday"))
+  print ("ls ::bandnews", t.ls("::bandnews"))
+  print ("ls (bandname )", t.ls("(bandname )"))
+  print ("ls test (bandname) :", t.ls("test/(text bandname)"))
   t.cd("bandname")
-  print "pwd : ", t.pwd()
-  print "ls test : ", t.ls("test")
-  print "open test : ", t.open("test")
+  print ("pwd : ", t.pwd())
+  print ("ls test : ", t.ls("test"))
+  print ("open test : ", t.open("test"))
   t.refresh()
   t.cd("..")
-  print "ls test : ", t.ls("test", "-l")
-  print "ls temp/python (International/text) : ", t.ls("temp/python (International/text)")
-  print "wildcard te?? : ", t.testwildcards("te??")
-  print "wildcard b* : ", t.testwildcards("b*")
-  print "wildcard ?*t*? :", t.testwildcards("?*t*?")
-  print "ls te?? : ", t.ls("te??")
-  print "ls Java : ", t.ls("Java")
-  print "open Java :::"
+  print ("ls test : ", t.ls("test", "-l"))
+  print ("ls temp/python (International/text) : ", t.ls("temp/python (International/text)"))
+  print ("wildcard te?? : ", t.testwildcards("te??"))
+  print ("wildcard b* : ", t.testwildcards("b*"))
+  print ("wildcard ?*t*? :", t.testwildcards("?*t*?"))
+  print ("ls te?? : ", t.ls("te??"))
+  print ("ls Java : ", t.ls("Java"))
+  print ("open Java :::")
   javas = t.open("Java")
   for j in javas:
-    print j.readline()
+    print (j.readline())
     j.close()
     
 if __name__ == "__main__":
